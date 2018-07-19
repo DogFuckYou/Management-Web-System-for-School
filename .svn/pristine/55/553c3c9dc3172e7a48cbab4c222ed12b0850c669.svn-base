@@ -1,0 +1,137 @@
+package com.ahnieh.dao.impl;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.ahnieh.dao.TeacherDao;
+import com.ahnieh.model.Teacher;
+import com.ahnieh.util.DBUtil;
+
+public class TeacherDaoImpl implements TeacherDao {
+
+	@Override
+	public void save(Teacher teacher) throws SQLException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void saveAll(List<Teacher> teacherList) throws SQLException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void delete(Teacher teacher) throws SQLException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void update(Teacher teacher) throws SQLException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Teacher query(String tid) throws SQLException {
+		Teacher teacher = null;
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		try {
+			conn = DBUtil.getConnection();
+			//3 操作数据库
+			String sql = "select * from teacher where tid=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, tid);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				teacher = new Teacher();
+				teacher.setTid(rs.getString("tid"));
+				teacher.setTname(rs.getString("tname"));
+				teacher.setPassword(rs.getString("password"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			//4 释放资源
+			if(rs != null)
+				try {
+					rs.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			if(pstmt != null)
+				try {
+					pstmt.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			if(conn != null)
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+		}
+		return teacher;
+	}
+
+	@Override
+	public List<Teacher> queryByCondition(String condition) throws SQLException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Teacher query(String tid, String password) throws SQLException {
+		Teacher teacher = null;
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		try {
+			conn = DBUtil.getConnection();
+			//3 操作数据库
+			String sql = "select * from teacher where tid=? and password=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, tid);
+			pstmt.setString(2, password);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				teacher = new Teacher();
+				teacher.setTid(rs.getString("tid"));
+				teacher.setTname(rs.getString("tname"));
+				teacher.setPassword(rs.getString("password"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			//4 释放资源
+			if(rs != null)
+				try {
+					rs.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			if(pstmt != null)
+				try {
+					pstmt.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			if(conn != null)
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+		}
+		return teacher;
+	}
+	
+}

@@ -1,0 +1,94 @@
+package com.ahnieh.action.basicinfoset;
+
+import java.io.IOException;
+import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.ahnieh.dao.StudentDao;
+import com.ahnieh.dao.impl.StudentDaoImpl;
+import com.ahnieh.model.Student;
+
+/**
+ * Servlet implementation class StudentQueryAction
+ */
+@WebServlet("/basicinfoset/studentmodify.do")
+public class StudentModifyAction extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+       
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public StudentModifyAction() {
+        super();
+        // TODO Auto-generated constructor stub
+    }
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		//获取查询条件
+		String sid = request.getParameter("sid");
+		String sname = request.getParameter("sname");
+		String password = request.getParameter("password");
+		String sex = request.getParameter("sex");
+		String classesno = request.getParameter("classesno");
+		String admissiondate = request.getParameter("admissiondate");
+		String birth = request.getParameter("birth");
+		String nativeplace = request.getParameter("nativeplace");
+		String identifyno = request.getParameter("identifyno");
+		String political = request.getParameter("political");
+		String mobilephone = request.getParameter("mobilephone");
+		String nation = request.getParameter("nation");
+		String address = request.getParameter("address");
+		//保存学生信息
+		StudentDao sDao = new StudentDaoImpl();
+		Student student = new Student();
+		student.setSid(sid);
+		student.setSname(sname);
+		student.setPassword(password);
+		student.setSex(sex);
+		student.setClassesno(classesno);
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		try {
+			student.setAdmissiondate(sdf.parse(admissiondate));
+			student.setBirth(sdf.parse(birth));
+		} catch (ParseException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		student.setNativeplace(nativeplace);
+		student.setIdentifyno(identifyno);
+		student.setPolitical(political);
+		student.setMobilephone(mobilephone);
+		student.setNation(nation);
+		student.setAddress(address);
+		try {
+			sDao.update(student);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		//跳转至消息页面
+		request.setAttribute("message", "学生信息修改成功！");
+		request.getRequestDispatcher("/common/success.jsp").forward(request, response);
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		doGet(request, response);
+	}
+
+}

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jdbc>
+	<user>xiaojiang</user>
+	<password>xiaojiang</password>
+	<url>jdbc:mysql:///mydb</url>
+	<driver>com.mysql.jdbc.Driver</driver>
+</jdbc>

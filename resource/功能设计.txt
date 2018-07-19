@@ -1,0 +1,148 @@
+一、系统管理模块功能
+本系统主要满足来自三类用户角色的需求，即学生用户、教师用户、管理员用户。系统管理模块主要完成如下几个功能点：
+--基础信息的维护（完成对表的增删改查的操作，支持excel批量导入，下载的功能）
+---- 学生信息的管理（专业ID）
+		create table student (
+			sid									varchar(15) primary key comment '学生ID',
+			sname               varchar(50) comment '学生姓名',
+			password            varchar(40) comment '登录密码',
+			sex                 varchar(1)  comment '性别 0男 1女',
+			classesno           varchar(15) comment '所属班级号',
+			admissiondate       date 				comment '入学日期',
+			birth       				date 				comment '出生日期',
+			nativeplace					varchar(20) comment '籍贯',
+			identifyno					varchar(20) comment '证件号码',
+			political 					varchar(20) comment '政治面貌',
+			mobilephone					varchar(20) comment '联系电话',
+			nation    					varchar(20) comment '民族',
+			address							varchar(255) comment '住址'
+		) comment = '学生信息表';
+---- 教师信息管理
+		create table teacher (
+			tid            varchar(15)  primary key comment '教师ID',
+			tname          varchar(50)   comment '教师姓名',
+			password       varchar(40)   comment '系统登录密码',
+			sex            varchar(1)    comment '性别 0男 1女',
+			professionalno varchar(40)   comment '专业号',
+			ProfessionalTitle varchar(2) comment '教师职称 01助教、02讲师、03副教授、04教授',
+			nativeplace					varchar(20) comment '籍贯',
+			identifyno					varchar(20) comment '证件号码',
+			political 					varchar(20) comment '政治面貌',
+			mobilephone					varchar(20) comment '联系电话',
+			nation    					varchar(20) comment '民族',
+			address							varchar(255) comment '住址',
+			introduce      text          comment '教师简介',
+			image          varchar(200)  comment '教师图片地址'
+		) comment = '教师信息表';
+---- 管理员信息管理
+		create table administrator (
+			aid      varchar(15) primary key comment '管理员ID',
+			aname    varchar(50) comment '管理员姓名',         
+			password varchar(40) comment '管理员登录密码'
+		) comment = '管理员信息表';
+---- 院系信息的管理
+		create table college (
+			collegeno       varchar(15) primary key comment '学院号',
+			collegename     varchar(50) comment '学院名称',
+			introduce       text comment '学院简介'  
+		) comment = '学院信息表'; 
+---- 专业信息的管理
+		create table professional (
+			professionalno   varchar(15) primary key comment '专业ID',
+			professionalname varchar(50) comment '专业名称',
+			collegeno        varchar(15) comment '归属的学院',
+			introduce        text        comment '专业介绍'
+		) comment = '专业信息表';
+---- 班级信息的管理
+		create table classes (
+			classesno   varchar(15) primary key comment '班级ID',
+			classesname varchar(50) comment '班级名称，如17级计算机应用一班',
+			professionalno   varchar(15) comment '归属的专业',
+			classgrade  varchar(4) comment '学年',
+			tid         varchar(15) comment '辅导员'
+		) comment = '班级信息表';
+---- 教室信息的管理
+		create table classroom (
+			roomid       varchar(15) primary key comment '教室ID',
+			roomname     varchar(40) comment '教室名称',
+			maxnum    	 smallint  	 comment '教室容量',
+			address		   varchar(255)   comment '教室地址'
+		) comment = '教室信息表';
+---- 课程信息的管理
+		create table Course (
+			cid       varchar(15) primary key comment '课程ID',
+			cname     varchar(40) comment '课程名称',
+			credit    varchar(1)  comment '课程学分',
+			period		smallint    comment '课程学时',
+			coursetype			varchar(2)  comment '课程大类 具体参照基础码表',
+			introduce text   comment '课程简介'
+		) comment = '课程信息表';
+---- 基础代码信息维护（对basecode表数据进行维护）
+		create table basetype (
+			codetype       varchar(15) comment '代码类别',
+			typename       varchar(50) comment '类别含义'
+		) comment = '基础类型表';
+		create table basecode (
+			codetype       varchar(15) comment '代码类别',
+			codecode     	 varchar(15) comment '明细代码',
+			codename       varchar(50) comment '代码含义'
+		) comment = '基础代码表';
+--人员权限的管理
+----任务代码
+		create table niehtask(
+			taskcode varchar(50) primary key comment '任务代码',
+			taskname varchar(50) not null comment '任务名称',
+			uppertaskcode varchar(50) not null comment '上级任务代码'
+		) comment = '任务信息表';
+----菜单管理
+		create table niehmenu(
+			menuid varchar(10) primary key comment '菜单ID',
+			menuname varchar(50) not null comment '菜单名称',
+			url varchar(255) comment '菜单URL',
+			menulevel integer not null comment '菜单级别',
+			displayno integer comment '菜单显示顺序',
+			taskcode varchar(50) comment '菜单对应任务号'
+		) comment = '菜单信息表';
+----岗位管理
+		create table niehgrade(
+			gradecode varchar(20) primary key comment '岗位代码',
+			gradename varchar(50) not null comment '岗位名称'
+		) comment = '岗位表';
+----岗位任务设置
+		create table niehgradetask(
+			gradecode varchar(20) comment '岗位代码',
+			taskcode varchar(50) comment '任务代码'
+		) comment = '岗位任务明细表';
+----人员岗位设置
+		create table niehusergrade(
+			usercode varchar(20) comment '员工ID号',
+			gradecode varchar(20) comment '岗位代码'
+		) comment = '人员岗位信息表';
+
+二、排课管理
+--排课管理
+1 将课程与教师、教室关联起来
+	create table CourseArrange (
+		id integer auto_increment primary key comment '主键ID',
+		cid       varchar(15) comment '课程ID',
+		tid       varchar(15) comment '教师ID',
+		roomid    varchar(15) comment '教室ID',
+		maxnum    smallint  	comment '课程最大学生数',
+		weekday   smallint comment '星期几 1~7表示星期一到星期日',
+		time    	smallint comment '上课时间 将上午8:00~12:00和下午13:30~17:30该时间段按每小时划分成8个时间段，分别对应1~8',
+		classgrade varchar(4) comment '学年',
+		term			 varchar(1) comment '学期',
+		validflag varchar(1) comment '有效标志位 1有效的 0无效的'
+	) comment = '教师课程安排信息表';
+三、选课管理
+该模块主要完成学生自主选课的功能，包括已选课程的查询等。
+	create table StudentCourse (
+		id integer auto_increment primary key comment '主键ID',
+		sid       varchar(15)  comment '学生ID',
+		cid       varchar(15)  comment '课程ID',
+		score     decimal(5,2) comment '成绩'
+	) comment = '学生选课信息表';
+
+四、成绩管理
+该模块主要完成学生成绩的录入（支持excel批量导入）、查询、下载等。
+

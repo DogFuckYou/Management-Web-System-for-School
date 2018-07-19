@@ -1,0 +1,244 @@
+-- 基础码表
+create table niehtype(
+	codetype varchar(20) primary key comment '代码类别',
+	codename varchar(50) comment '类别含义'
+) comment = '基础类别码表';
+create table niehcode(
+	codetype varchar(20) comment '代码类别',
+	codecode varchar(20) comment '明细代码',
+	codename varchar(50) comment '代码含义'
+) comment = '基础明细码表';
+alter table niehcode add constraint pk_niehcode primary key (codetype,codecode);
+
+-- 权限配置
+-- 1 任务代码表
+-- drop table niehtask;
+create table niehtask(
+	taskcode varchar(50) primary key comment '任务代码',
+	taskname varchar(50) not null comment '任务名称',
+	uppertaskcode varchar(50) not null comment '上级任务代码'
+) comment = '任务信息表';
+insert into niehtask values('basicinfoset','基础信息管理','basicinfoset');
+insert into niehtask values('basicinfoset.admin','管理员信息管理','basicinfoset');
+insert into niehtask values('basicinfoset.teacher','教师信息管理','basicinfoset');
+insert into niehtask values('basicinfoset.student','学生信息管理','basicinfoset');
+insert into niehtask values('basicinfoset.college','学院信息管理','basicinfoset');
+insert into niehtask values('basicinfoset.professional','专业信息管理','basicinfoset');
+insert into niehtask values('basicinfoset.classes','班级信息管理','basicinfoset');
+insert into niehtask values('basicinfoset.classroom','教室信息管理','basicinfoset');
+insert into niehtask values('basicinfoset.course','课程信息管理','basicinfoset');
+insert into niehtask values('basicinfoset.basecode','基础代码信息管理','basicinfoset');
+insert into niehtask values('powerset','权限管理','powerset');
+insert into niehtask values('powerset.task','任务管理','powerset');
+insert into niehtask values('powerset.menu','菜单管理','powerset');
+insert into niehtask values('powerset.grade','岗位管理','powerset');
+insert into niehtask values('powerset.gradetask','岗位任务管理','powerset');
+insert into niehtask values('powerset.usergrade','人员权限管理','powerset');
+insert into niehtask values('courseset','排课管理','courseset');
+insert into niehtask values('courseset.coursearrange','课程安排管理','courseset');
+insert into niehtask values('courseset.coursequery','课程查询','courseset');
+insert into niehtask values('studentcourse','选课管理','studentcourse');
+insert into niehtask values('studentcourse.selected','课程选择','studentcourse');
+insert into niehtask values('studentcourse.modify','已选课程修改','studentcourse');
+insert into niehtask values('studentcourse.query','已选课程查询','studentcourse');
+insert into niehtask values('achievementset','成绩管理','achievementset');
+insert into niehtask values('achievementset.input','成绩录入','achievementset');
+insert into niehtask values('achievementset.query','成绩查询','achievementset');
+-- 2 岗位表
+create table niehgrade(
+	gradecode varchar(20) primary key comment '',
+	gradename varchar(50) not null comment ''
+) comment = '岗位表';
+insert into niehgrade values('001','系统管理员');
+insert into niehgrade values('002','学生岗');
+insert into niehgrade values('003','教师岗');
+
+-- 3 菜单信息表
+-- drop table niehmenu;
+create table niehmenu(
+	menuid varchar(10) primary key comment '菜单ID',
+	menuname varchar(50) not null comment '菜单名称',
+	url varchar(255) comment '菜单URL',
+	menulevel integer not null comment '菜单级别',
+	displayno integer comment '菜单显示顺序',
+	taskcode varchar(50) comment '菜单对应任务号'
+) comment = '菜单信息表';
+insert into niehmenu values('001', '基础信息管理', '', 1, 1, 'basicinfoset');
+insert into niehmenu values('00101', '管理员信息管理', '', 2, 1, 'basicinfoset.admin');
+insert into niehmenu values('00102', '教师信息管理', '', 2, 2, 'basicinfoset.teacher');
+insert into niehmenu values('00103', '学生信息管理', '', 2, 3, 'basicinfoset.student');
+insert into niehmenu values('00104', '学院信息管理', '', 2, 4, 'basicinfoset.college');
+insert into niehmenu values('00105', '专业信息管理', '', 2, 5, 'basicinfoset.professional');
+insert into niehmenu values('00106', '班级信息管理', '', 2, 6, 'basicinfoset.classes');
+insert into niehmenu values('00107', '教室信息管理', '', 2, 7, 'basicinfoset.classroom');
+insert into niehmenu values('00108', '课程信息管理', '', 2, 8, 'basicinfoset.course');
+insert into niehmenu values('00109', '基础代码信息管理', '', 2, 9, 'basicinfoset.basecode');
+insert into niehmenu values('002', '权限管理', '', 1, 2, 'powerset');
+insert into niehmenu values('00201', '任务管理', '', 2, 1, 'powerset.task');
+insert into niehmenu values('00202', '菜单管理', '', 2, 2, 'powerset.menu');
+insert into niehmenu values('00203', '岗位管理', '', 2, 3, 'powerset.grade');
+insert into niehmenu values('00204', '岗位任务管理', '', 2, 4, 'powerset.gradetask');
+insert into niehmenu values('00205', '人员权限管理', '', 2, 5, 'powerset.usergrade');
+insert into niehmenu values('003', '排课管理', '', 1, 3, 'courseset');
+insert into niehmenu values('00301', '课程安排管理', '', 2, 1, 'courseset.coursearrange');
+insert into niehmenu values('00302', '课程查询', '', 2, 2, 'courseset.coursequery');
+insert into niehmenu values('004', '选课管理', '', 1, 4, 'studentcourse');
+insert into niehmenu values('00401', '课程选择', '', 2, 1, 'studentcourse.selected');
+insert into niehmenu values('00402', '已选课程修改', '', 2, 2, 'studentcourse.modify');
+insert into niehmenu values('00403', '已选课程查询', '', 2, 3, 'studentcourse.query');
+insert into niehmenu values('005', '成绩管理', '', 1, 5, 'achievementset');
+insert into niehmenu values('00501', '成绩录入', '', 2, 1, 'achievementset.input');
+insert into niehmenu values('00502', '成绩查询', '', 2, 2, 'achievementset.query');
+
+-- 4 岗位任务明细表
+create table niehgradetask(
+	gradecode varchar(20) comment '',
+	taskcode varchar(50) comment ''
+) comment = '岗位任务明细表';
+insert into niehgradetask values('001', 'basicinfoset');
+insert into niehgradetask values('001', 'basicinfoset.admin');
+insert into niehgradetask values('001', 'basicinfoset.teacher');
+insert into niehgradetask values('001', 'basicinfoset.student');
+insert into niehgradetask values('001', 'basicinfoset.college');
+insert into niehgradetask values('001', 'basicinfoset.professional');
+insert into niehgradetask values('001', 'basicinfoset.classes');
+insert into niehgradetask values('001', 'basicinfoset.classroom');
+insert into niehgradetask values('001', 'basicinfoset.course');
+insert into niehgradetask values('001', 'basicinfoset.basecode');
+insert into niehgradetask values('001', 'powerset');
+insert into niehgradetask values('001', 'powerset.task');
+insert into niehgradetask values('001', 'powerset.menu');
+insert into niehgradetask values('001', 'powerset.grade');
+insert into niehgradetask values('001', 'powerset.gradetask');
+insert into niehgradetask values('001', 'powerset.usergrade');
+insert into niehgradetask values('001', 'courseset');
+insert into niehgradetask values('001', 'courseset.coursearrange');
+insert into niehgradetask values('001', 'courseset.coursequery');
+insert into niehgradetask values('001', 'studentcourse');
+insert into niehgradetask values('001', 'studentcourse.selected');
+insert into niehgradetask values('001', 'studentcourse.modify');
+insert into niehgradetask values('001', 'studentcourse.query');
+insert into niehgradetask values('001', 'achievementset');
+insert into niehgradetask values('001', 'achievementset.input');
+insert into niehgradetask values('001', 'achievementset.query');
+insert into niehgradetask values('002', 'studentcourse');
+insert into niehgradetask values('002', 'studentcourse.selected');
+insert into niehgradetask values('002', 'studentcourse.modify');
+insert into niehgradetask values('002', 'studentcourse.query');
+insert into niehgradetask values('002', 'achievementset');
+insert into niehgradetask values('002', 'achievementset.query');
+
+-- 5 人员岗位信息表
+create table niehusergrade(
+	usercode varchar(20) comment '员工ID号',
+	gradecode varchar(20) comment '岗位代码'
+) comment = '人员岗位信息表';
+insert into niehusergrade values('0000','001');
+
+-- 学生信息表 Student
+create table student (
+sid									varchar(15) primary key comment '学生ID',
+sname               varchar(50) comment '学生姓名',
+password            varchar(40) comment '登录密码',
+sex                 varchar(1)  comment '性别 0男 1女',
+collegeno           varchar(20) comment '所属学院号',
+professionalno      varchar(40) comment '所属专业号',
+classesno           varchar(15) comment '所属班级号',
+admissiondate       date 				comment '入学日期',
+birth       				date 				comment '出生日期',
+nativeplace					varchar(20) comment '籍贯',
+identifyno					varchar(20) comment '证件号码',
+political 					varchar(20) comment '政治面貌',
+mobilephone					varchar(20) comment '联系电话',
+nation    					varchar(20) comment '民族',
+address							varchar(255) comment '住址'
+) comment = '学生信息表';
+
+-- 教师信息表 Teacher
+create table teacher (
+tid            varchar(15)  primary key comment '教师ID',
+tname          varchar(50)   comment '教师姓名',
+password       varchar(40)   comment '系统登录密码',
+sex            varchar(1)    comment '性别 0男 1女',
+collegeno      varchar(15)   comment '学院号',
+professionalno varchar(40)   comment '专业号',
+ProfessionalTitle varchar(2) comment '教师职称 01助教、02讲师、03副教授、04教授',
+nativeplace					varchar(20) comment '籍贯',
+identifyno					varchar(20) comment '证件号码',
+political 					varchar(20) comment '政治面貌',
+mobilephone					varchar(20) comment '联系电话',
+nation    					varchar(20) comment '民族',
+address							varchar(255) comment '住址',
+introduce      text          comment '教师简介',
+image          varchar(200)  comment '教师图片地址'
+) comment = '教师信息表';
+
+-- 管理员信息表 Administrator
+create table administrator (
+aid      varchar(15) primary key comment '管理员ID',
+aname    varchar(50) comment '管理员姓名',         
+password varchar(40) comment '管理员登录密码'
+) comment = '管理员信息表';
+
+-- 学院信息表 College
+create table College (
+collegeno       varchar(15) primary key comment '学院号',
+collegename     varchar(50) comment '学院名称',
+introduce       text comment '学院简介'  
+) comment = '学院信息表';     
+
+-- 专业信息表 Professional
+create table professional (
+professionalno   varchar(15) primary key comment '',
+professionalname varchar(50) comment '',
+collegeno        varchar(15) comment '',
+introduce        text       
+) comment = '专业信息表';
+
+-- 课程信息表 Course
+create table Course (
+cid       varchar(15) primary key comment '课程ID',
+cname     varchar(40) comment '课程名称',
+credit    varchar(1)  comment '课程学分',
+period		smallint    comment '课程学时',
+coursetype			varchar(2)  comment '课程大类 具体参照基础码表',
+introduce text   comment '课程简介'
+) comment = '课程信息表';
+
+-- 教室信息表 Classroom
+create table Classroom (
+roomid       varchar(15) primary key comment '教室ID',
+roomname     varchar(40) comment '教室名称',
+maxnum    	 smallint  	 comment '教室容量',
+address		   varchar(255)   comment '教室地址'
+) comment = '教室信息表';
+
+-- 教师课程安排信息表 CourseArrange
+create table CourseArrange (
+id integer auto_increment primary key comment '主键ID',
+cid       varchar(15) comment '课程ID',
+tid       varchar(15) comment '教师ID',
+roomid    varchar(15) comment '教室ID',
+maxnum    smallint  	comment '课程最大学生数',
+weekday   smallint comment '星期几 1~7表示星期一到星期日',
+time    	smallint comment '上课时间 将上午8:00~12:00和下午13:30~17:30该时间段按每小时划分成8个时间段，分别对应1~8',
+classgrade varchar(4) comment '学年',
+term			 varchar(1) comment '学期',
+validflag varchar(1) comment '有效标志位 1有效的 0无效的'
+) comment = '教师课程安排信息表';
+
+-- 学生选课信息表 StudentCourse
+create table StudentCourse (
+id integer auto_increment primary key comment '主键ID',
+sid       varchar(15)  comment '学生ID',
+cid       varchar(15)  comment '课程ID',
+score     decimal(5,2) comment '成绩'
+) comment = '学生选课信息表';
+
+-- 专业必修课程表 ProfessionalCourse
+create table ProfessionalCourse(
+id integer auto_increment primary key comment '主键ID',
+collegeno      varchar(15) comment '学院号',
+professionalno varchar(15) comment '专业号',
+cid            varchar(15) comment '课程ID'
+) comment = '专业必修课程表';
